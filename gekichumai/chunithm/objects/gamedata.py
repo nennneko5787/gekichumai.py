@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class GameData(BaseModel):
-    idx: int
+    index: int
     icon: str
     honor: str
     level: int

@@ -68,7 +68,45 @@ class ChunithmHTTPClient:
     def login(
         self, segaid: str, password: str
     ) -> Callable[..., Union[str, asyncio.Future[str]]]:
+        """ログインリクエストを送信します。
+        非同期モードがオンになっている場合、この関数はコルーチンを返します。
+
+        Args:
+            segaid (str): ログインするユーザーのsegaID。
+            password (str): ログインするユーザーのパスワード。
+
+        Returns:
+            Callable[..., Union[str, asyncio.Future[str]]]: CHUNITHM-NETからのレスポンス。
+        """
         if self.is_async:
             return self._async_login(segaid, password)
         else:
             return self._sync_login(segaid, password)
+
+    async def _async_switch_gamedata(self, index: int) -> str:
+        response = await self.http.post(
+            "https://new.chunithm-net.com/chuni-mobile/html/mobile/aimeList/submit/",
+            data={
+                "idx": index,
+                "token": self.csrf,
+            },
+            follow_redirects=True,
+        )
+        return response.text
+
+    async def _sync_switch_gamedata(self, index: int) -> str:
+        response = self.http.post(
+            "https://new.chunithm-net.com/chuni-mobile/html/mobile/aimeList/submit/",
+            data={
+                "idx": index,
+                "token": self.csrf,
+            },
+            follow_redirects=True,
+        )
+        return response.text
+
+    def switch_gamedata(self, index: int):
+        if self.is_async:
+            return self._async_switch_gamedata(index)
+        else:
+            return self._sync_switch_gamedata(index)
