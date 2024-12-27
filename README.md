@@ -1,5 +1,8 @@
 # gekichumai.py
 
+## 移行中です
+現在は <https://github.com/nennneko5787/otoge.py> にすべてを移行中です。
+
 ゲキチュウマイ-NET を Python から利用できるモジュール。
 
 ## Current Limits
